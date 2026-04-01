@@ -157,3 +157,61 @@ class Account:
             # 这里简化处理：每日收盘后，所有总持仓转为可用
             # 实际更严谨的需要记录每日买入批次，但这里简化
             pos.available_qty = pos.total_qty
+            
+    def process_dividend_split(
+        self,
+        stock_code: str,
+        per_share_dividend: float = 0.0,
+        split_ratio: float = 0.0
+    ):
+        """处理除权除息
+        
+        Args:
+            stock_code: 股票代码
+            per_share_dividend: 每股派息金额（税前）
+            split_ratio: 送转股比例，比如10送10就是1.0，10送5就是0.5
+        """
+        pos = self.positions.get(stock_code)
+        if not pos:
+            return
+            
+        # 派息处理：现金直接打入可用资金
+        if per_share_dividend > 0:
+            dividend_amount = pos.total_qty * per_share_dividend
+            self.available_cash += dividend_amount
+            self.total_cash += dividend_amount
+            
+        # 送转股处理
+        if split_ratio > 0:
+            add_qty = int(pos.total_qty * split_ratio)
+            # 调整持仓数量
+            pos.total_qty += add_qty
+            pos.available_qty += add_qty
+            # 调整成本价
+            total_cost = pos.cost_basis * (pos.total_qty - add_qty)
+            pos.cost_basis = total_cost / pos.total_qty
+            
+    def force_close_position(self, stock_code: str, price: float) -> bool:
+        """强制平仓（退市时使用）"""
+        pos = self.positions.get(stock_code)
+        if not pos:
+            return False
+            
+        # 强制卖出所有持仓，不需要交易成本（退市清算）
+        amount = price * pos.total_qty
+        self.available_cash += amount
+        self.total_cash = self.available_cash + self.frozen_cash
+        
+        del self.positions[stock_code]
+        
+        self.trade_history.append({
+            'side': 'FORCE_SELL',
+            'code': stock_code,
+            'price': price,
+            'qty': pos.total_qty,
+            'amount': amount,
+            'costs': 0.0,
+            'pnl': (price - pos.cost_basis) * pos.total_qty
+        })
+        
+        return True

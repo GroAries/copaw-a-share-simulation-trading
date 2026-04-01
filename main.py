@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 模拟盘主入口 - 第一性原理：系统只提供数据、规则、执行，不干预决策
-整合腾讯实时行情、账户管理、撮合引擎
+整合腾讯实时行情（含五档盘口/停牌/ST）、账户管理、撮合引擎
 """
 
 import argparse
@@ -70,7 +70,13 @@ def main():
                     'volume': quote['volume'],
                     'amount': quote['amount'],
                     'change_pct': quote['change_pct'],
-                    'time': quote['time']
+                    'time': quote['time'],
+                    'is_suspended': quote['is_suspended'],
+                    'is_st': quote['is_st'],
+                    'bids': quote['bids'],
+                    'asks': quote['asks'],
+                    'limit_up': quote['limit_up'],
+                    'limit_down': quote['limit_down']
                 }
                 
                 # 调用策略（系统不干预）
@@ -82,9 +88,6 @@ def main():
                     price = signal.get('price')
                     order_type = 'LIMIT' if price else 'MARKET'
                     
-                    # 解析交易时段
-                    trade_time = parse_trade_time(quote['time'])
-                    
                     # 创建订单
                     order = Order(
                         order_id=f"ORD_{int(time.time()*1000000)}",
@@ -93,27 +96,32 @@ def main():
                         order_type=order_type,
                         price=price if price else 0.0,
                         qty=qty,
+                        remaining_qty=qty,
                         timestamp=time.time()
                     )
                     
                     # 撮合
-                    matched, exec_price, reason = engine.match_order(
+                    matched, exec_price, exec_qty, reason = engine.match_order_with_orderbook(
                         order=order,
-                        current_price=quote['current'],
-                        pre_close=quote['pre_close'],
-                        trade_time=trade_time,
-                        volume=quote['volume']
+                        quote=quote
                     )
                     
-                    if matched and exec_price:
+                    if matched and exec_price and exec_qty:
                         if side == 'BUY':
-                            success = account.apply_buy_order(exec_price, qty, stock_code)
+                            # 检查可用资金
+                            amount = exec_price * exec_qty
+                            costs = account.calculate_trading_costs('BUY', exec_price, exec_qty, stock_code)
+                            total = amount + costs
+                            if account.available_cash < total:
+                                print(f"[!] 资金不足，拒绝买入 {quote['name']} ({stock_code})")
+                                continue
+                            success = account.apply_buy_order(exec_price, exec_qty, stock_code)
                             if success:
-                                print(f"[*] BUY {quote['name']} ({stock_code}): {qty}股 @ ¥{exec_price:.2f}")
+                                print(f"[*] BUY {quote['name']} ({stock_code}): {exec_qty}股 @ ¥{exec_price:.2f}")
                         else:
-                            success, pnl = account.apply_sell_order(exec_price, qty, stock_code)
+                            success, pnl = account.apply_sell_order(exec_price, exec_qty, stock_code)
                             if success:
-                                print(f"[*] SELL {quote['name']} ({stock_code}): {qty}股 @ ¥{exec_price:.2f} | 盈亏: ¥{pnl:.2f}")
+                                print(f"[*] SELL {quote['name']} ({stock_code}): {exec_qty}股 @ ¥{exec_price:.2f} | 盈亏: ¥{pnl:.2f}")
                     else:
                         if reason:
                             print(f"[!] 订单拒绝 {quote['name']} ({stock_code}): {reason}")

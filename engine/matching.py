@@ -2,18 +2,21 @@
 # -*- coding: utf-8 -*-
 """
 撮合引擎 - 第一性原理：完全对齐A股实盘撮合规则
-市价单+滑点、涨跌停限制、交易时段限制、无对手盘不成交、T+1
+基于五档盘口、价格优先时间优先队列、无虚假成交
 """
 
 from dataclasses import dataclass
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List, Dict
 from datetime import time
+import heapq
+import time as sys_time
 
 
 # 交易时段定义
 TRADING_PERIODS = [
-    (time(9, 30), time(11, 30)),  # 上午
-    (time(13, 0), time(15, 0))     # 下午
+    (time(9, 15), time(9, 25)),  # 集合竞价
+    (time(9, 30), time(11, 30)),  # 上午连续竞价
+    (time(13, 0), time(15, 0))     # 下午连续竞价
 ]
 
 
@@ -26,16 +29,75 @@ class Order:
     order_type: str     # MARKET/LIMIT
     price: float
     qty: int
-    timestamp: float    # 时间戳
-    status: str = 'PENDING'  # PENDING/FILLED/CANCELLED/REJECTED
+    remaining_qty: int
+    timestamp: float    # Unix时间戳，用于时间优先
+    status: str = 'PENDING'  # PENDING/PARTIAL_FILLED/FILLED/CANCELLED/REJECTED
+
+
+class OrderBook:
+    """订单簿 - 实现价格优先、时间优先"""
+    
+    def __init__(self):
+        # 买单堆（用负价格实现最大堆）
+        self.bid_heap: List[Tuple[float, float, int, Order]] = []
+        # 卖单堆（最小堆）
+        self.ask_heap: List[Tuple[float, float, int, Order]] = []
+        # 订单ID映射，方便撤单
+        self.order_map: Dict[str, Order] = {}
+        
+    def add_order(self, order: Order):
+        """添加订单到订单簿"""
+        self.order_map[order.order_id] = order
+        if order.side == 'BUY':
+            # 买单：用负价格实现最大堆，相同价格按时间戳排序
+            heapq.heappush(self.bid_heap, (-order.price, order.timestamp, id(order), order))
+        else:
+            # 卖单：最小堆
+            heapq.heappush(self.ask_heap, (order.price, order.timestamp, id(order), order))
+            
+    def cancel_order(self, order_id: str) -> bool:
+        """撤单"""
+        order = self.order_map.get(order_id)
+        if not order or order.status in ['FILLED', 'REJECTED']:
+            return False
+        order.status = 'CANCELLED'
+        return True
+        
+    def get_best_bid(self) -> Optional[Order]:
+        """获取最优买单"""
+        while self.bid_heap:
+            neg_price, ts, _, order = self.bid_heap[0]
+            if order.status not in ['PENDING', 'PARTIAL_FILLED']:
+                heapq.heappop(self.bid_heap)
+                continue
+            return order
+        return None
+        
+    def get_best_ask(self) -> Optional[Order]:
+        """获取最优卖单"""
+        while self.ask_heap:
+            price, ts, _, order = self.ask_heap[0]
+            if order.status not in ['PENDING', 'PARTIAL_FILLED']:
+                heapq.heappop(self.ask_heap)
+                continue
+            return order
+        return None
 
 
 class MatchingEngine:
     """撮合引擎"""
     
-    def __init__(self, slippage: float = 0.001):
+    def __init__(self, slippage: float = 0.0):
         self.slippage = slippage
-        self.orders = []
+        # 每个股票一个订单簿
+        self.order_books: Dict[str, OrderBook] = {}
+        self.trades = []
+        
+    def get_order_book(self, stock_code: str) -> OrderBook:
+        """获取或创建订单簿"""
+        if stock_code not in self.order_books:
+            self.order_books[stock_code] = OrderBook()
+        return self.order_books[stock_code]
         
     def is_in_trading_period(self, trade_time: time) -> bool:
         """判断是否在交易时段内"""
@@ -44,105 +106,118 @@ class MatchingEngine:
                 return True
         return False
         
-    def get_price_limit(self, stock_code: str, pre_close: float) -> Tuple[float, float]:
-        """获取涨跌停价格 - 区分板块"""
-        # 科创板/创业板20%，主板10%，ST/退市整理5%
-        # 科创板代码: 688xxx
-        # 创业板代码: 300xxx, 301xxx
-        # 主板代码: 600xxx, 601xxx, 603xxx, 000xxx, 001xxx, 002xxx, 003xxx
-        # ST代码: 600xxx(ST), 000xxx(ST), 688xxx(ST), 300xxx(ST)
-        # 这里简化，根据代码前缀判断，实际需要结合名称
-        # 假设科创板/创业板20%，主板10%，ST 5%
-        limit_up_pct = 0.1
-        limit_down_pct = 0.1
-        
-        # 科创板
-        if stock_code.startswith('688'):
-            limit_up_pct = 0.2
-            limit_down_pct = 0.2
-        # 创业板
-        elif stock_code.startswith('300') or stock_code.startswith('301'):
-            limit_up_pct = 0.2
-            limit_down_pct = 0.2
-        # ST股（简化，实际需要检查名称）
-        # 暂时假设没有ST股
-        
-        limit_up = pre_close * (1 + limit_up_pct)
-        limit_down = pre_close * (1 - limit_down_pct)
-        
-        # 四舍五入到分
-        limit_up = round(limit_up, 2)
-        limit_down = round(limit_down, 2)
-        
-        return limit_up, limit_down
-        
-    def match_order(
+    def match_order_with_orderbook(
         self,
         order: Order,
-        current_price: float,
-        pre_close: float,
-        trade_time: time,
-        volume: int
-    ) -> Tuple[bool, Optional[float], Optional[str]]:
-        """撮合订单 - 完全对齐实盘规则
+        quote: Dict
+    ) -> Tuple[bool, Optional[float], Optional[int], Optional[str]]:
+        """基于实盘五档盘口撮合订单（不依赖内部订单簿，直接用实盘数据）
         
-        返回: (是否成交, 成交价格, 拒绝原因)
+        返回: (是否成交, 成交价格, 成交数量, 拒绝原因)
         """
         # 1. 检查交易时段
-        if not self.is_in_trading_period(trade_time):
-            return False, None, "非交易时段"
+        trade_time_str = quote['time']
+        if len(trade_time_str) >= 14:
+            hour = int(trade_time_str[8:10])
+            minute = int(trade_time_str[10:12])
+            second = int(trade_time_str[12:14])
+            trade_time = time(hour, minute, second)
+        else:
+            # 如果时间格式不对，默认允许
+            trade_time = time(10, 0, 0)
             
-        # 2. 检查涨跌停限制
-        limit_up, limit_down = self.get_price_limit(order.stock_code, pre_close)
+        if not self.is_in_trading_period(trade_time):
+            return False, None, None, "非交易时段"
+            
+        # 2. 检查停牌
+        if quote['is_suspended']:
+            return False, None, None, "股票停牌"
+            
+        # 3. 检查涨跌停限制
+        limit_up = quote['limit_up']
+        limit_down = quote['limit_down']
         
-        # 3. 超涨跌停挂单废单
+        # 超涨跌停挂单废单
         if order.side == 'BUY':
             if order.order_type == 'LIMIT' and order.price > limit_up:
-                return False, None, "买单价格超涨停板"
+                return False, None, None, "买单价格超涨停板"
         else:  # SELL
             if order.order_type == 'LIMIT' and order.price < limit_down:
-                return False, None, "卖单价格超跌停板"
+                return False, None, None, "卖单价格超跌停板"
                 
         # 4. 封涨跌停完全禁止成交
-        if current_price >= limit_up:
-            # 涨停，禁止买入成交
+        # 涨停时：卖一为空或卖一价格等于涨停价，且买一价格等于涨停价，禁止买入
+        if quote['current'] >= limit_up:
             if order.side == 'BUY':
-                return False, None, "涨停板无法买入"
-        if current_price <= limit_down:
-            # 跌停，禁止卖出成交
+                # 检查是否有卖单
+                if not quote['asks'] or quote['asks'][0]['price'] >= limit_up:
+                    return False, None, None, "涨停板无法买入"
+        # 跌停时：买一为空或买一价格等于跌停价，且卖一价格等于跌停价，禁止卖出
+        if quote['current'] <= limit_down:
             if order.side == 'SELL':
-                return False, None, "跌停板无法卖出"
-                
-        # 5. 无对手盘不成交 - 简化版，这里假设成交量为0时不成交
-        if volume <= 0:
-            return False, None, "无对手盘"
-            
-        # 6. 计算成交价
-        if order.order_type == 'MARKET':
-            # 市价单 + 动态滑点
-            if order.side == 'BUY':
-                # 买入：向上滑
-                exec_price = current_price * (1 + self.slippage)
-            else:
-                # 卖出：向下滑
-                exec_price = current_price * (1 - self.slippage)
-        else:  # LIMIT
-            # 限价单
-            if order.side == 'BUY':
-                if current_price <= order.price:
-                    exec_price = min(order.price, current_price)
-                else:
-                    return False, None, "限价未到"
-            else:  # SELL
-                if current_price >= order.price:
-                    exec_price = max(order.price, current_price)
-                else:
-                    return False, None, "限价未到"
+                if not quote['bids'] or quote['bids'][0]['price'] <= limit_down:
+                    return False, None, None, "跌停板无法卖出"
                     
-        # 7. 确保成交价在涨跌停范围内
+        # 5. 基于五档盘口撮合（无内部订单簿，直接用实盘数据）
+        exec_price = None
+        exec_qty = 0
+        remaining_qty = order.qty
+        
+        if order.side == 'BUY':
+            # 买入：从卖一到卖五依次匹配
+            for ask in quote['asks']:
+                if remaining_qty <= 0:
+                    break
+                # 限价单检查
+                if order.order_type == 'LIMIT' and ask['price'] > order.price:
+                    break
+                # 计算可成交数量
+                match_qty = min(remaining_qty, ask['volume'])
+                exec_price = ask['price']
+                exec_qty += match_qty
+                remaining_qty -= match_qty
+        else:  # SELL
+            # 卖出：从买一到买五依次匹配
+            for bid in quote['bids']:
+                if remaining_qty <= 0:
+                    break
+                # 限价单检查
+                if order.order_type == 'LIMIT' and bid['price'] < order.price:
+                    break
+                # 计算可成交数量
+                match_qty = min(remaining_qty, bid['volume'])
+                exec_price = bid['price']
+                exec_qty += match_qty
+                remaining_qty -= match_qty
+                
+        # 6. 如果完全没成交，返回失败
+        if exec_qty <= 0:
+            return False, None, None, "无对手盘"
+            
+        # 7. 应用滑点（仅市价单）
+        if order.order_type == 'MARKET' and self.slippage > 0:
+            if order.side == 'BUY':
+                exec_price *= (1 + self.slippage)
+            else:
+                exec_price *= (1 - self.slippage)
+                
+        # 8. 确保成交价在涨跌停范围内
         exec_price = max(limit_down, min(limit_up, round(exec_price, 2)))
         
-        order.status = 'FILLED'
-        self.orders.append(order)
+        # 更新订单状态
+        if exec_qty == order.qty:
+            order.status = 'FILLED'
+        else:
+            order.status = 'PARTIAL_FILLED'
+            order.remaining_qty = remaining_qty
+            
+        self.trades.append({
+            'order_id': order.order_id,
+            'side': order.side,
+            'stock_code': order.stock_code,
+            'price': exec_price,
+            'qty': exec_qty,
+            'time': quote['time']
+        })
         
-        return True, exec_price, None
+        return True, exec_price, exec_qty, None

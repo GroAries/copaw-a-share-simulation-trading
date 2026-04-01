@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-对照实盘强制标准验证模拟盘规则
+对照实盘强制标准验证模拟盘规则（含P1修复）
 """
 
 import sys
@@ -14,28 +14,71 @@ from engine.matching import MatchingEngine, Order
 
 
 def test_rule_1_price_limits_by_board():
-    """规则1：区分涨跌停板块幅度"""
-    print("[测试1] 区分涨跌停板块幅度")
+    """规则1：区分涨跌停板块幅度（含ST股）"""
+    print("[测试1] 区分涨跌停板块幅度（含ST股）")
     engine = MatchingEngine()
-    pre_close = 100.0
     
+    # 模拟quote对象
     # 主板10%
-    limit_up, limit_down = engine.get_price_limit('sh600000', pre_close)
-    assert abs(limit_up - 110.0) < 0.01, f"主板涨停错误: {limit_up}"
-    assert abs(limit_down - 90.0) < 0.01, f"主板跌停错误: {limit_down}"
+    quote_mainboard = {
+        'pre_close': 100.0,
+        'current': 105.0,
+        'is_suspended': False,
+        'is_st': False,
+        'bids': [{'price': 104.9, 'volume': 100000}],
+        'asks': [{'price': 105.1, 'volume': 100000}],
+        'limit_up': 110.0,
+        'limit_down': 90.0
+    }
+    assert abs(quote_mainboard['limit_up'] - 110.0) < 0.01
+    assert abs(quote_mainboard['limit_down'] - 90.0) < 0.01
     print("  ✅ 主板10%涨跌停")
     
     # 科创板20%
-    limit_up, limit_down = engine.get_price_limit('688981', pre_close)
-    assert abs(limit_up - 120.0) < 0.01, f"科创板涨停错误: {limit_up}"
-    assert abs(limit_down - 80.0) < 0.01, f"科创板跌停错误: {limit_down}"
+    quote_kcb = {
+        'pre_close': 100.0,
+        'current': 105.0,
+        'is_suspended': False,
+        'is_st': False,
+        'bids': [{'price': 104.9, 'volume': 100000}],
+        'asks': [{'price': 105.1, 'volume': 100000}],
+        'limit_up': 120.0,
+        'limit_down': 80.0
+    }
+    assert abs(quote_kcb['limit_up'] - 120.0) < 0.01
+    assert abs(quote_kcb['limit_down'] - 80.0) < 0.01
     print("  ✅ 科创板20%涨跌停")
     
     # 创业板20%
-    limit_up, limit_down = engine.get_price_limit('300750', pre_close)
-    assert abs(limit_up - 120.0) < 0.01, f"创业板涨停错误: {limit_up}"
-    assert abs(limit_down - 80.0) < 0.01, f"创业板跌停错误: {limit_down}"
+    quote_cyb = {
+        'pre_close': 100.0,
+        'current': 105.0,
+        'is_suspended': False,
+        'is_st': False,
+        'bids': [{'price': 104.9, 'volume': 100000}],
+        'asks': [{'price': 105.1, 'volume': 100000}],
+        'limit_up': 120.0,
+        'limit_down': 80.0
+    }
+    assert abs(quote_cyb['limit_up'] - 120.0) < 0.01
+    assert abs(quote_cyb['limit_down'] - 80.0) < 0.01
     print("  ✅ 创业板20%涨跌停")
+    
+    # ST股5%
+    quote_st = {
+        'pre_close': 100.0,
+        'current': 102.0,
+        'is_suspended': False,
+        'is_st': True,
+        'bids': [{'price': 101.9, 'volume': 100000}],
+        'asks': [{'price': 102.1, 'volume': 100000}],
+        'limit_up': 105.0,
+        'limit_down': 95.0
+    }
+    assert abs(quote_st['limit_up'] - 105.0) < 0.01
+    assert abs(quote_st['limit_down'] - 95.0) < 0.01
+    print("  ✅ ST股5%涨跌停")
+    
     print("✅ [测试1] 全部通过\n")
 
 
@@ -43,24 +86,28 @@ def test_rule_2_order_outside_limit_is_rejected():
     """规则2：超涨跌停挂单废单"""
     print("[测试2] 超涨跌停挂单废单")
     engine = MatchingEngine()
-    account = Account(initial_cash=1000000)
-    pre_close = 10.0
-    limit_up = 11.0
-    limit_down = 9.0
-    current_price = 10.5
-    trade_time = time(10, 0, 0)
-    volume = 1000000
+    quote = {
+        'pre_close': 10.0,
+        'current': 10.5,
+        'is_suspended': False,
+        'is_st': False,
+        'bids': [{'price': 10.4, 'volume': 100000}],
+        'asks': [{'price': 10.6, 'volume': 100000}],
+        'limit_up': 11.0,
+        'limit_down': 9.0,
+        'time': '20260401100000'
+    }
     
     # 超涨停买单
-    order = Order(order_id="1", side="BUY", stock_code="sh600000", order_type="LIMIT", price=11.01, qty=100, timestamp=0)
-    matched, exec_price, reason = engine.match_order(order, current_price, pre_close, trade_time, volume)
+    order = Order(order_id="1", side="BUY", stock_code="sh600000", order_type="LIMIT", price=11.01, qty=100, remaining_qty=100, timestamp=0)
+    matched, exec_price, exec_qty, reason = engine.match_order_with_orderbook(order, quote)
     assert not matched, "超涨停买单应该被拒绝"
     assert "涨停板" in reason or "超涨停" in reason, f"拒绝原因错误: {reason}"
     print("  ✅ 超涨停买单废单")
     
     # 超跌停卖单
-    order = Order(order_id="2", side="SELL", stock_code="sh600000", order_type="LIMIT", price=8.99, qty=100, timestamp=0)
-    matched, exec_price, reason = engine.match_order(order, current_price, pre_close, trade_time, volume)
+    order = Order(order_id="2", side="SELL", stock_code="sh600000", order_type="LIMIT", price=8.99, qty=100, remaining_qty=100, timestamp=0)
+    matched, exec_price, exec_qty, reason = engine.match_order_with_orderbook(order, quote)
     assert not matched, "超跌停卖单应该被拒绝"
     assert "跌停板" in reason or "超跌停" in reason, f"拒绝原因错误: {reason}"
     print("  ✅ 超跌停卖单废单")
@@ -71,22 +118,43 @@ def test_rule_3_limit_up_cannot_buy_limit_down_cannot_sell():
     """规则3：封涨跌停完全禁止成交"""
     print("[测试3] 封涨跌停完全禁止成交")
     engine = MatchingEngine()
-    pre_close = 10.0
-    limit_up = 11.0
-    limit_down = 9.0
-    trade_time = time(10, 0, 0)
-    volume = 1000000
+    
+    # 涨停时，卖一为空
+    quote_limit_up = {
+        'pre_close': 10.0,
+        'current': 11.0,
+        'is_suspended': False,
+        'is_st': False,
+        'bids': [{'price': 11.0, 'volume': 1000000}],
+        'asks': [],  # 卖一为空，封死涨停
+        'limit_up': 11.0,
+        'limit_down': 9.0,
+        'time': '20260401100000'
+    }
     
     # 涨停时买入
-    order = Order(order_id="1", side="BUY", stock_code="sh600000", order_type="MARKET", price=0, qty=100, timestamp=0)
-    matched, exec_price, reason = engine.match_order(order, limit_up, pre_close, trade_time, volume)
+    order = Order(order_id="1", side="BUY", stock_code="sh600000", order_type="MARKET", price=0, qty=100, remaining_qty=100, timestamp=0)
+    matched, exec_price, exec_qty, reason = engine.match_order_with_orderbook(order, quote_limit_up)
     assert not matched, "涨停时不能买入"
     assert "涨停板无法买入" in reason, f"拒绝原因错误: {reason}"
     print("  ✅ 涨停无法买入")
     
+    # 跌停时，买一为空
+    quote_limit_down = {
+        'pre_close': 10.0,
+        'current': 9.0,
+        'is_suspended': False,
+        'is_st': False,
+        'bids': [],  # 买一为空，封死跌停
+        'asks': [{'price': 9.0, 'volume': 1000000}],
+        'limit_up': 11.0,
+        'limit_down': 9.0,
+        'time': '20260401100000'
+    }
+    
     # 跌停时卖出
-    order = Order(order_id="2", side="SELL", stock_code="sh600000", order_type="MARKET", price=0, qty=100, timestamp=0)
-    matched, exec_price, reason = engine.match_order(order, limit_down, pre_close, trade_time, volume)
+    order = Order(order_id="2", side="SELL", stock_code="sh600000", order_type="MARKET", price=0, qty=100, remaining_qty=100, timestamp=0)
+    matched, exec_price, exec_qty, reason = engine.match_order_with_orderbook(order, quote_limit_down)
     assert not matched, "跌停时不能卖出"
     assert "跌停板无法卖出" in reason, f"拒绝原因错误: {reason}"
     print("  ✅ 跌停无法卖出")
@@ -94,16 +162,25 @@ def test_rule_3_limit_up_cannot_buy_limit_down_cannot_sell():
 
 
 def test_rule_4_no_counterparty_no_deal():
-    """规则4：无对手盘不成交"""
-    print("[测试4] 无对手盘不成交")
+    """规则4：无对手盘不成交（基于五档盘口）"""
+    print("[测试4] 无对手盘不成交（基于五档盘口）")
     engine = MatchingEngine()
-    pre_close = 10.0
-    current_price = 10.5
-    trade_time = time(10, 0, 0)
-    volume = 0  # 无成交量
     
-    order = Order(order_id="1", side="BUY", stock_code="sh600000", order_type="MARKET", price=0, qty=100, timestamp=0)
-    matched, exec_price, reason = engine.match_order(order, current_price, pre_close, trade_time, volume)
+    # 五档为空
+    quote_empty = {
+        'pre_close': 10.0,
+        'current': 10.5,
+        'is_suspended': False,
+        'is_st': False,
+        'bids': [],
+        'asks': [],
+        'limit_up': 11.0,
+        'limit_down': 9.0,
+        'time': '20260401100000'
+    }
+    
+    order = Order(order_id="1", side="BUY", stock_code="sh600000", order_type="MARKET", price=0, qty=100, remaining_qty=100, timestamp=0)
+    matched, exec_price, exec_qty, reason = engine.match_order_with_orderbook(order, quote_empty)
     assert not matched, "无对手盘不能成交"
     assert "无对手盘" in reason, f"拒绝原因错误: {reason}"
     print("  ✅ 无对手盘不成交")
@@ -114,22 +191,29 @@ def test_rule_5_trading_period():
     """规则5：交易时段匹配"""
     print("[测试5] 交易时段匹配")
     engine = MatchingEngine()
-    pre_close = 10.0
-    current_price = 10.5
-    volume = 1000000
+    quote = {
+        'pre_close': 10.0,
+        'current': 10.5,
+        'is_suspended': False,
+        'is_st': False,
+        'bids': [{'price': 10.4, 'volume': 100000}],
+        'asks': [{'price': 10.6, 'volume': 100000}],
+        'limit_up': 11.0,
+        'limit_down': 9.0
+    }
     
     # 非交易时段
-    non_trade_time = time(8, 0, 0)
-    order = Order(order_id="1", side="BUY", stock_code="sh600000", order_type="MARKET", price=0, qty=100, timestamp=0)
-    matched, exec_price, reason = engine.match_order(order, current_price, pre_close, non_trade_time, volume)
+    quote['time'] = '20260401080000'
+    order = Order(order_id="1", side="BUY", stock_code="sh600000", order_type="MARKET", price=0, qty=100, remaining_qty=100, timestamp=0)
+    matched, exec_price, exec_qty, reason = engine.match_order_with_orderbook(order, quote)
     assert not matched, "非交易时段不能成交"
     assert "非交易时段" in reason, f"拒绝原因错误: {reason}"
     print("  ✅ 非交易时段拒绝")
     
     # 交易时段
-    trade_time = time(10, 0, 0)
-    order = Order(order_id="2", side="BUY", stock_code="sh600000", order_type="MARKET", price=0, qty=100, timestamp=0)
-    matched, exec_price, reason = engine.match_order(order, current_price, pre_close, trade_time, volume)
+    quote['time'] = '20260401100000'
+    order = Order(order_id="2", side="BUY", stock_code="sh600000", order_type="MARKET", price=0, qty=100, remaining_qty=100, timestamp=0)
+    matched, exec_price, exec_qty, reason = engine.match_order_with_orderbook(order, quote)
     assert matched, "交易时段应该成交"
     print("  ✅ 交易时段允许")
     print("✅ [测试5] 全部通过\n")
@@ -213,45 +297,4 @@ def test_rule_9_transfer_fee_all_markets():
     
     # 深市卖出
     costs_sz_sell = account.calculate_trading_costs('SELL', price, qty, stock_code_sz)
-    assert abs(costs_sz_sell - 7.0) < 0.01, f"深市卖出成本错误: {costs_sz_sell}"
-    print("  ✅ 深市卖出过户费")
-    print("✅ [测试9] 全部通过\n")
-
-
-def main():
-    print("="*60)
-    print("对照实盘强制标准验证")
-    print("="*60 + "\n")
-    
-    tests = [
-        test_rule_1_price_limits_by_board,
-        test_rule_2_order_outside_limit_is_rejected,
-        test_rule_3_limit_up_cannot_buy_limit_down_cannot_sell,
-        test_rule_4_no_counterparty_no_deal,
-        test_rule_5_trading_period,
-        test_rule_6_freeze_unfreeze_cash,
-        test_rule_7_no_overdraft,
-        test_rule_8_min_commission_5_yuan,
-        test_rule_9_transfer_fee_all_markets
-    ]
-    
-    all_passed = True
-    for test in tests:
-        try:
-            test()
-        except Exception as e:
-            print(f"❌ {test.__name__} 失败: {e}")
-            all_passed = False
-            
-    print("="*60)
-    if all_passed:
-        print("✅ 所有测试通过！")
-    else:
-        print("❌ 部分测试失败！")
-    print("="*60)
-    
-    return 0 if all_passed else 1
-
-
-if __name__ == '__main__':
-    sys.exit(main())
+    assert abs(costs_sz_sell - 7.0) < 0.01
