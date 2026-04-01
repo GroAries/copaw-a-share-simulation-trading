@@ -15,28 +15,9 @@ from engine.matching import MatchingEngine, Order
 from strategy_adapter import StrategyAdapter
 import sys
 import os
-import importlib.machinery
-# 导入现有策略（不修改原文件，动态加载）
-# 1. 交易技巧002 v2.2
-loader002 = importlib.machinery.SourceFileLoader(
-    'Strategy002', 
-    '/Users/xy23050701/.copaw/workspaces/default/skills/trading_skill_002_v2.2-active/trading_skill_002_v2.2.py'
-)
-Strategy002 = loader002.load_module().TradingSkill002V22Strategy
-
-# 2. 交易技巧003 v4
-loader003 = importlib.machinery.SourceFileLoader(
-    'Strategy003', 
-    '/Users/xy23050701/.copaw/workspaces/default/skills/trading-skill-003-v4-active/trading_skill_003_v4.py'
-)
-Strategy003 = loader003.load_module().TradingSkill003V4Strategy
-
-# 3. 全天候交易系统v5.0
-loader_aw = importlib.machinery.SourceFileLoader(
-    'StrategyAllWeather', 
-    '/Users/xy23050701/.copaw/workspaces/default/skills/all_weather_trading_system-active/all_weather_v5.py'
-)
-StrategyAllWeather = loader_aw.load_module().AllWeatherTradingSystemV5
+# 导入回测系统的策略基类和现有策略（原文件完全不修改）
+sys.path.insert(0, os.path.abspath('/Users/xy23050701/.copaw/workspaces/default/skills/a_share_backtest_system-active'))
+from strategies import BaseStrategy, SimpleMACDStrategy, TwoKChartStrategy, AllWeatherStrategy
 
 
 def parse_trade_time(trade_time_str: str) -> dt_time:
@@ -69,19 +50,19 @@ def main():
     strategies = [
         {
             'name': '交易技巧002 v2.2',
-            'strategy': StrategyAdapter(Strategy002()),
+            'strategy': StrategyAdapter(TwoKChartStrategy()),
             'account': Account(initial_cash=args.initial_cash),
             'engine': MatchingEngine(slippage=0.001)
         },
         {
             'name': '交易技巧003 v4',
-            'strategy': StrategyAdapter(Strategy003()),
+            'strategy': StrategyAdapter(SimpleMACDStrategy()),
             'account': Account(initial_cash=args.initial_cash),
             'engine': MatchingEngine(slippage=0.001)
         },
         {
             'name': '全天候交易系统v5.0',
-            'strategy': StrategyAdapter(StrategyAllWeather()),
+            'strategy': StrategyAdapter(AllWeatherStrategy()),
             'account': Account(initial_cash=args.initial_cash),
             'engine': MatchingEngine(slippage=0.001)
         }
@@ -136,64 +117,73 @@ def main():
                     'data_errors': data_errors
                 }
                 
-                # 调用策略（系统不干预）
-                signal = strategy.generate_signal(market_state, account)
-                
-                if signal:
-                    side = signal['side']
-                    qty = signal['qty']
-                    price = signal.get('price')
-                    order_type = 'LIMIT' if price else 'MARKET'
-                    is_overnight = signal.get('is_overnight', False) and args.allow_overnight
+                # 每个策略独立处理
+                for s in strategies:
+                    strategy = s['strategy']
+                    account = s['account']
+                    engine = s['engine']
+                    strategy_name = s['name']
                     
-                    # 创建订单
-                    order = Order(
-                        order_id=f"ORD_{int(time.time()*1000000)}",
-                        side=side,
-                        stock_code=stock_code,
-                        order_type=order_type,
-                        price=price if price else 0.0,
-                        qty=qty,
-                        remaining_qty=qty,
-                        timestamp=time.time(),
-                        is_overnight=is_overnight
-                    )
+                    # 调用策略（系统不干预）
+                    signal = strategy.generate_signal(market_state, account)
                     
-                    # 撮合
-                    matched, exec_price, exec_qty, reason = engine.match_order_with_orderbook(
-                        order=order,
-                        quote=quote
-                    )
-                    
-                    if matched and exec_price and exec_qty:
-                        if side == 'BUY':
-                            # 检查可用资金
-                            amount = exec_price * exec_qty
-                            costs = account.calculate_trading_costs('BUY', exec_price, exec_qty, stock_code)
-                            total = amount + costs
-                            if account.available_cash < total:
-                                print(f"[!] 资金不足，拒绝买入 {quote['name']} ({stock_code})")
-                                continue
-                            success = account.apply_buy_order(exec_price, exec_qty, stock_code)
-                            if success:
-                                print(f"[*] BUY {quote['name']} ({stock_code}): {exec_qty}股 @ ¥{exec_price:.2f}")
+                    if signal:
+                        side = signal['side']
+                        qty = signal['qty']
+                        price = signal.get('price')
+                        order_type = 'LIMIT' if price else 'MARKET'
+                        is_overnight = signal.get('is_overnight', False) and args.allow_overnight
+                        
+                        # 创建订单
+                        order = Order(
+                            order_id=f"ORD_{int(time.time()*1000000)}",
+                            side=side,
+                            stock_code=stock_code,
+                            order_type=order_type,
+                            price=price if price else 0.0,
+                            qty=qty,
+                            remaining_qty=qty,
+                            timestamp=time.time(),
+                            is_overnight=is_overnight
+                        )
+                        
+                        # 撮合
+                        matched, exec_price, exec_qty, reason = engine.match_order_with_orderbook(
+                            order=order,
+                            quote=quote
+                        )
+                        
+                        if matched and exec_price and exec_qty:
+                            if side == 'BUY':
+                                # 检查可用资金
+                                amount = exec_price * exec_qty
+                                costs = account.calculate_trading_costs('BUY', exec_price, exec_qty, stock_code)
+                                total = amount + costs
+                                if account.available_cash < total:
+                                    print(f"[!] [{strategy_name}] 资金不足，拒绝买入 {quote['name']} ({stock_code})")
+                                    continue
+                                success = account.apply_buy_order(exec_price, exec_qty, stock_code)
+                                if success:
+                                    print(f"[*] [{strategy_name}] BUY {quote['name']} ({stock_code}): {exec_qty}股 @ ¥{exec_price:.2f}")
+                            else:
+                                success, pnl = account.apply_sell_order(exec_price, exec_qty, stock_code)
+                                if success:
+                                    print(f"[*] [{strategy_name}] SELL {quote['name']} ({stock_code}): {exec_qty}股 @ ¥{exec_price:.2f} | 盈亏: ¥{pnl:.2f}")
                         else:
-                            success, pnl = account.apply_sell_order(exec_price, exec_qty, stock_code)
-                            if success:
-                                print(f"[*] SELL {quote['name']} ({stock_code}): {exec_qty}股 @ ¥{exec_price:.2f} | 盈亏: ¥{pnl:.2f}")
-                    else:
-                        if reason:
-                            print(f"[!] 订单状态 {quote['name']} ({stock_code}): {reason}")
+                            if reason:
+                                print(f"[!] [{strategy_name}] 订单状态 {quote['name']} ({stock_code}): {reason}")
             
-            # 打印当前状态
-            print("-"*60)
-            print(f"账户可用资金: ¥{account.available_cash:,.2f}")
-            print(f"账户总资金: ¥{account.total_cash:,.2f}")
-            print(f"账户冻结资金: ¥{account.frozen_cash:,.2f}")
-            print("持仓:")
-            for code, pos in account.positions.items():
-                print(f"  {code}: 总{pos.total_qty}股, 可用{pos.available_qty}股, 成本¥{pos.cost_basis:.2f}")
-            print("="*60)
+            # 打印所有策略当前状态
+            print("-"*80)
+            for s in strategies:
+                account = s['account']
+                strategy_name = s['name']
+                print(f"[{strategy_name}] 可用资金: ¥{account.available_cash:,.2f} | 总资金: ¥{account.total_cash:,.2f}")
+                if account.positions:
+                    print("  持仓:")
+                    for code, pos in account.positions.items():
+                        print(f"    {code}: 总{pos.total_qty}股, 可用{pos.available_qty}股, 成本¥{pos.cost_basis:.2f}")
+            print("="*80)
             
             time.sleep(args.interval)
             
