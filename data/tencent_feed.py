@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 """
 腾讯财经实时行情数据源 - 第一性原理：真实市场数据
-支持解析五档盘口、停牌状态、ST标识、除权除息信息
+支持解析五档盘口、停牌状态、ST标识、除权除息信息、数据异常校验
 """
 
 import requests
 import time
+from datetime import datetime
 from typing import Dict, List
 
 
@@ -152,7 +153,7 @@ class TencentRealtimeFeed:
                 limit_up = round(pre_close * (1 + limit_up_pct), 2)
                 limit_down = round(pre_close * (1 - limit_down_pct), 2)
             
-            results[code] = {
+            quote = {
                 'name': name,
                 'current': current,
                 'open': safe_float(self.FIELD_MAP['open']),
@@ -171,4 +172,61 @@ class TencentRealtimeFeed:
                 'limit_down': limit_down
             }
             
+            # 第一性原理：仅做数据异常检测，不修改数据、不干预决策
+            quote['data_errors'] = self.validate_quote(quote)
+            results[code] = quote
+            
         return results
+        
+    def validate_quote(self, quote: Dict) -> List[str]:
+        """数据异常校验：符合第一性原理，仅检测异常并返回，不篡改数据
+        返回异常列表，空列表代表正常
+        """
+        errors = []
+        code = quote.get('code', '')
+        current = quote['current']
+        pre_close = quote['pre_close']
+        limit_up = quote['limit_up']
+        limit_down = quote['limit_down']
+        bids = quote['bids']
+        asks = quote['asks']
+        time_str = quote['time']
+        
+        # 1. 基础数据缺失异常
+        if pre_close <= 0:
+            errors.append("昨收价异常：为0或负数")
+        if current <= 0 and not quote['is_suspended']:
+            errors.append("当前价异常：为0或负数且非停牌")
+        if len(time_str) != 14:
+            errors.append(f"时间戳格式异常：{time_str}")
+            
+        # 2. 价格范围异常
+        if not quote['is_suspended'] and pre_close > 0:
+            if current > limit_up * 1.01:
+                errors.append(f"价格超涨停：当前价¥{current} > 涨停价¥{limit_up}")
+            if current < limit_down * 0.99:
+                errors.append(f"价格超跌停：当前价¥{current} < 跌停价¥{limit_down}")
+                
+        # 3. 盘口顺序异常
+        if bids and asks:
+            best_bid = bids[0]['price']
+            best_ask = asks[0]['price']
+            if best_bid > best_ask and best_ask > 0:
+                errors.append(f"盘口价格倒置：买一¥{best_bid} > 卖一¥{best_ask}")
+                
+        # 4. 时间滞后异常（超过5分钟）
+        if len(time_str) == 14:
+            try:
+                quote_time = datetime.strptime(time_str, "%Y%m%d%H%M%S")
+                now = datetime.now()
+                time_diff = (now - quote_time).total_seconds()
+                if time_diff > 300:  # 滞后5分钟以上
+                    errors.append(f"行情时间滞后：{time_diff:.0f}秒")
+            except:
+                errors.append(f"时间戳解析失败：{time_str}")
+                
+        # 5. 成交量异常
+        if current > 0 and quote['volume'] < 0:
+            errors.append(f"成交量异常：{quote['volume']}股")
+            
+        return errors

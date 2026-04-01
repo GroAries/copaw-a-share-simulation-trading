@@ -35,6 +35,7 @@ def main():
     parser.add_argument('--duration', type=int, default=60, help='运行时长（秒）')
     parser.add_argument('--interval', type=int, default=3, help='行情刷新间隔（秒）')
     parser.add_argument('--allow-overnight', action='store_true', help='允许挂隔夜单')
+    parser.add_argument('--enable-data-validation', action='store_true', help='开启数据异常校验，异常时暂停撮合并告警')
     args = parser.parse_args()
     
     stock_list = args.stocks.split(',')
@@ -63,7 +64,17 @@ def main():
                 # 第一性原理：系统从不给出买卖建议，只提供行情数据
                 # 决策完全由策略做出
                 
-                # 构造市场状态
+                # 数据异常校验（开启时执行）
+                data_errors = quote.get('data_errors', [])
+                if args.enable_data_validation and data_errors:
+                    print(f"⚠️ 数据异常告警 [{quote['name']} ({stock_code})]:")
+                    for err in data_errors:
+                        print(f"   - {err}")
+                    print(f"   暂停本次撮合，待数据恢复后自动继续")
+                    # 仅暂停撮合，不干预其他逻辑，符合第一性原理：不替用户做决策
+                    continue
+                
+                # 构造市场状态，透传异常信息给策略（策略可自行决定是否处理）
                 market_state = {
                     'code': stock_code,
                     'name': quote['name'],
@@ -78,7 +89,8 @@ def main():
                     'bids': quote['bids'],
                     'asks': quote['asks'],
                     'limit_up': quote['limit_up'],
-                    'limit_down': quote['limit_down']
+                    'limit_down': quote['limit_down'],
+                    'data_errors': data_errors
                 }
                 
                 # 调用策略（系统不干预）
