@@ -1,0 +1,2020 @@
+[
+  {
+    "timestamp": 1775026788.1184828,
+    "datetime": "2026-04-01 14:59:48",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.26,
+        "open": 10.2,
+        "volume": 56530000,
+        "amount": 290952.0,
+        "time": "20260401145946",
+        "pre_close": 0.0,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.29,
+            "volume": 582300
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.29,
+            "volume": 582300
+          }
+        ],
+        "limit_up": 10.26,
+        "limit_down": 10.26,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.72,
+        "open": 409.73,
+        "volume": 22895200,
+        "amount": 118501.0,
+        "time": "20260401145942",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 406.06,
+            "volume": 214700
+          }
+        ],
+        "asks": [
+          {
+            "price": 406.06,
+            "volume": 214700
+          }
+        ],
+        "limit_up": 405.72,
+        "limit_down": 405.72,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026791.2413719,
+    "datetime": "2026-04-01 14:59:51",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.26,
+        "open": 10.2,
+        "volume": 56530000,
+        "amount": 290952.0,
+        "time": "20260401145946",
+        "pre_close": 0.0,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.29,
+            "volume": 582300
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.29,
+            "volume": 582300
+          }
+        ],
+        "limit_up": 10.26,
+        "limit_down": 10.26,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.72,
+        "open": 409.73,
+        "volume": 22895200,
+        "amount": 118501.0,
+        "time": "20260401145942",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 406.06,
+            "volume": 214700
+          }
+        ],
+        "asks": [
+          {
+            "price": 406.06,
+            "volume": 214700
+          }
+        ],
+        "limit_up": 405.72,
+        "limit_down": 405.72,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026794.3662999,
+    "datetime": "2026-04-01 14:59:54",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.26,
+        "open": 10.2,
+        "volume": 56530000,
+        "amount": 290952.0,
+        "time": "20260401145952",
+        "pre_close": 0.0,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.29,
+            "volume": 590200
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.29,
+            "volume": 590200
+          }
+        ],
+        "limit_up": 10.26,
+        "limit_down": 10.26,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.72,
+        "open": 409.73,
+        "volume": 22895200,
+        "amount": 118501.0,
+        "time": "20260401145951",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 406.06,
+            "volume": 228100
+          }
+        ],
+        "asks": [
+          {
+            "price": 406.06,
+            "volume": 228100
+          }
+        ],
+        "limit_up": 405.72,
+        "limit_down": 405.72,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026797.498227,
+    "datetime": "2026-04-01 14:59:57",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.26,
+        "open": 10.2,
+        "volume": 56530000,
+        "amount": 290952.0,
+        "time": "20260401145955",
+        "pre_close": 0.0,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.29,
+            "volume": 700400
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.29,
+            "volume": 700400
+          }
+        ],
+        "limit_up": 10.26,
+        "limit_down": 10.26,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.72,
+        "open": 409.73,
+        "volume": 22895200,
+        "amount": 118501.0,
+        "time": "20260401145951",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 406.06,
+            "volume": 228100
+          }
+        ],
+        "asks": [
+          {
+            "price": 406.06,
+            "volume": 228100
+          }
+        ],
+        "limit_up": 405.72,
+        "limit_down": 405.72,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026800.61633,
+    "datetime": "2026-04-01 15:00:00",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.26,
+        "open": 10.2,
+        "volume": 56530000,
+        "amount": 290952.0,
+        "time": "20260401145958",
+        "pre_close": 0.0,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.26,
+            "volume": 791300
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.26,
+            "volume": 791300
+          }
+        ],
+        "limit_up": 10.26,
+        "limit_down": 10.26,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.72,
+        "open": 409.73,
+        "volume": 22895200,
+        "amount": 118501.0,
+        "time": "20260401145951",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 406.06,
+            "volume": 228100
+          }
+        ],
+        "asks": [
+          {
+            "price": 406.06,
+            "volume": 228100
+          }
+        ],
+        "limit_up": 405.72,
+        "limit_down": 405.72,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026803.7220821,
+    "datetime": "2026-04-01 15:00:03",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.26,
+        "open": 10.2,
+        "volume": 56530000,
+        "amount": 290952.0,
+        "time": "20260401150001",
+        "pre_close": 0.0,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 886500
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.24,
+            "volume": 886500
+          }
+        ],
+        "limit_up": 10.26,
+        "limit_down": 10.26,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.72,
+        "open": 409.73,
+        "volume": 22895200,
+        "amount": 118501.0,
+        "time": "20260401145951",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 406.06,
+            "volume": 228100
+          }
+        ],
+        "asks": [
+          {
+            "price": 406.06,
+            "volume": 228100
+          }
+        ],
+        "limit_up": 405.72,
+        "limit_down": 405.72,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026806.833952,
+    "datetime": "2026-04-01 15:00:06",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 10.35,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 11.38,
+        "limit_down": 9.31,
+        "data_errors": []
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 118501.0,
+        "time": "20260401150000",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 405.71,
+            "volume": 44000
+          },
+          {
+            "price": 405.7,
+            "volume": 7500
+          },
+          {
+            "price": 405.68,
+            "volume": 400
+          },
+          {
+            "price": 405.67,
+            "volume": 100
+          },
+          {
+            "price": 405.64,
+            "volume": 200
+          }
+        ],
+        "asks": [
+          {
+            "price": 405.72,
+            "volume": 2800
+          },
+          {
+            "price": 405.75,
+            "volume": 100
+          },
+          {
+            "price": 405.77,
+            "volume": 700
+          },
+          {
+            "price": 405.8,
+            "volume": 100
+          },
+          {
+            "price": 405.84,
+            "volume": 200
+          }
+        ],
+        "limit_up": 405.71,
+        "limit_down": 405.71,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026809.94606,
+    "datetime": "2026-04-01 15:00:09",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 10.35,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 11.38,
+        "limit_down": 9.31,
+        "data_errors": []
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 118501.0,
+        "time": "20260401150000",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 405.71,
+            "volume": 44000
+          },
+          {
+            "price": 405.7,
+            "volume": 7500
+          },
+          {
+            "price": 405.68,
+            "volume": 400
+          },
+          {
+            "price": 405.67,
+            "volume": 100
+          },
+          {
+            "price": 405.64,
+            "volume": 200
+          }
+        ],
+        "asks": [
+          {
+            "price": 405.72,
+            "volume": 2800
+          },
+          {
+            "price": 405.75,
+            "volume": 100
+          },
+          {
+            "price": 405.77,
+            "volume": 700
+          },
+          {
+            "price": 405.8,
+            "volume": 100
+          },
+          {
+            "price": 405.84,
+            "volume": 200
+          }
+        ],
+        "limit_up": 405.71,
+        "limit_down": 405.71,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026813.064613,
+    "datetime": "2026-04-01 15:00:13",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 0.0,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 10.24,
+        "limit_down": 10.24,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 118501.0,
+        "time": "20260401150000",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 405.71,
+            "volume": 44000
+          },
+          {
+            "price": 405.7,
+            "volume": 7500
+          },
+          {
+            "price": 405.68,
+            "volume": 400
+          },
+          {
+            "price": 405.67,
+            "volume": 100
+          },
+          {
+            "price": 405.64,
+            "volume": 200
+          }
+        ],
+        "asks": [
+          {
+            "price": 405.72,
+            "volume": 2800
+          },
+          {
+            "price": 405.75,
+            "volume": 100
+          },
+          {
+            "price": 405.77,
+            "volume": 700
+          },
+          {
+            "price": 405.8,
+            "volume": 100
+          },
+          {
+            "price": 405.84,
+            "volume": 200
+          }
+        ],
+        "limit_up": 405.71,
+        "limit_down": 405.71,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026816.196832,
+    "datetime": "2026-04-01 15:00:16",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 10.35,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 11.38,
+        "limit_down": 9.31,
+        "data_errors": []
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 118501.0,
+        "time": "20260401150000",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 405.71,
+            "volume": 44000
+          },
+          {
+            "price": 405.7,
+            "volume": 7500
+          },
+          {
+            "price": 405.68,
+            "volume": 400
+          },
+          {
+            "price": 405.67,
+            "volume": 100
+          },
+          {
+            "price": 405.64,
+            "volume": 200
+          }
+        ],
+        "asks": [
+          {
+            "price": 405.72,
+            "volume": 2800
+          },
+          {
+            "price": 405.75,
+            "volume": 100
+          },
+          {
+            "price": 405.77,
+            "volume": 700
+          },
+          {
+            "price": 405.8,
+            "volume": 100
+          },
+          {
+            "price": 405.84,
+            "volume": 200
+          }
+        ],
+        "limit_up": 405.71,
+        "limit_down": 405.71,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026819.322764,
+    "datetime": "2026-04-01 15:00:19",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 0.0,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 10.24,
+        "limit_down": 10.24,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 118501.0,
+        "time": "20260401150000",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 405.71,
+            "volume": 44000
+          },
+          {
+            "price": 405.7,
+            "volume": 7500
+          },
+          {
+            "price": 405.68,
+            "volume": 400
+          },
+          {
+            "price": 405.67,
+            "volume": 100
+          },
+          {
+            "price": 405.64,
+            "volume": 200
+          }
+        ],
+        "asks": [
+          {
+            "price": 405.72,
+            "volume": 2800
+          },
+          {
+            "price": 405.75,
+            "volume": 100
+          },
+          {
+            "price": 405.77,
+            "volume": 700
+          },
+          {
+            "price": 405.8,
+            "volume": 100
+          },
+          {
+            "price": 405.84,
+            "volume": 200
+          }
+        ],
+        "limit_up": 405.71,
+        "limit_down": 405.71,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026822.452678,
+    "datetime": "2026-04-01 15:00:22",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 10.35,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 11.38,
+        "limit_down": 9.31,
+        "data_errors": []
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 118501.0,
+        "time": "20260401150000",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 405.71,
+            "volume": 44000
+          },
+          {
+            "price": 405.7,
+            "volume": 7500
+          },
+          {
+            "price": 405.68,
+            "volume": 400
+          },
+          {
+            "price": 405.67,
+            "volume": 100
+          },
+          {
+            "price": 405.64,
+            "volume": 200
+          }
+        ],
+        "asks": [
+          {
+            "price": 405.72,
+            "volume": 2800
+          },
+          {
+            "price": 405.75,
+            "volume": 100
+          },
+          {
+            "price": 405.77,
+            "volume": 700
+          },
+          {
+            "price": 405.8,
+            "volume": 100
+          },
+          {
+            "price": 405.84,
+            "volume": 200
+          }
+        ],
+        "limit_up": 405.71,
+        "limit_down": 405.71,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026825.5808508,
+    "datetime": "2026-04-01 15:00:25",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 10.35,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 11.38,
+        "limit_down": 9.31,
+        "data_errors": []
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 118501.0,
+        "time": "20260401150000",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 405.71,
+            "volume": 44000
+          },
+          {
+            "price": 405.7,
+            "volume": 7500
+          },
+          {
+            "price": 405.68,
+            "volume": 400
+          },
+          {
+            "price": 405.67,
+            "volume": 100
+          },
+          {
+            "price": 405.64,
+            "volume": 200
+          }
+        ],
+        "asks": [
+          {
+            "price": 405.72,
+            "volume": 2800
+          },
+          {
+            "price": 405.75,
+            "volume": 100
+          },
+          {
+            "price": 405.77,
+            "volume": 700
+          },
+          {
+            "price": 405.8,
+            "volume": 100
+          },
+          {
+            "price": 405.84,
+            "volume": 200
+          }
+        ],
+        "limit_up": 405.71,
+        "limit_down": 405.71,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026828.7312372,
+    "datetime": "2026-04-01 15:00:28",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 0.0,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 10.24,
+        "limit_down": 10.24,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 118501.0,
+        "time": "20260401150000",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 405.71,
+            "volume": 44000
+          },
+          {
+            "price": 405.7,
+            "volume": 7500
+          },
+          {
+            "price": 405.68,
+            "volume": 400
+          },
+          {
+            "price": 405.67,
+            "volume": 100
+          },
+          {
+            "price": 405.64,
+            "volume": 200
+          }
+        ],
+        "asks": [
+          {
+            "price": 405.72,
+            "volume": 2800
+          },
+          {
+            "price": 405.75,
+            "volume": 100
+          },
+          {
+            "price": 405.77,
+            "volume": 700
+          },
+          {
+            "price": 405.8,
+            "volume": 100
+          },
+          {
+            "price": 405.84,
+            "volume": 200
+          }
+        ],
+        "limit_up": 405.71,
+        "limit_down": 405.71,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026831.864483,
+    "datetime": "2026-04-01 15:00:31",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 10.35,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 11.38,
+        "limit_down": 9.31,
+        "data_errors": []
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 118501.0,
+        "time": "20260401150000",
+        "pre_close": 0.0,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 405.71,
+            "volume": 44000
+          },
+          {
+            "price": 405.7,
+            "volume": 7500
+          },
+          {
+            "price": 405.68,
+            "volume": 400
+          },
+          {
+            "price": 405.67,
+            "volume": 100
+          },
+          {
+            "price": 405.64,
+            "volume": 200
+          }
+        ],
+        "asks": [
+          {
+            "price": 405.72,
+            "volume": 2800
+          },
+          {
+            "price": 405.75,
+            "volume": 100
+          },
+          {
+            "price": 405.77,
+            "volume": 700
+          },
+          {
+            "price": 405.8,
+            "volume": 100
+          },
+          {
+            "price": 405.84,
+            "volume": 200
+          }
+        ],
+        "limit_up": 405.71,
+        "limit_down": 405.71,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": 1775026834.987861,
+    "datetime": "2026-04-01 15:00:34",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 10.35,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 11.38,
+        "limit_down": 9.31,
+        "data_errors": []
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 119540.0,
+        "time": "20260401150031",
+        "pre_close": 405.93,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [],
+        "asks": [],
+        "limit_up": 446.52,
+        "limit_down": 365.34,
+        "data_errors": []
+      }
+    }
+  },
+  {
+    "timestamp": 1775026838.1108842,
+    "datetime": "2026-04-01 15:00:38",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 10.35,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 11.38,
+        "limit_down": 9.31,
+        "data_errors": []
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 119540.0,
+        "time": "20260401150031",
+        "pre_close": 405.93,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [],
+        "asks": [],
+        "limit_up": 446.52,
+        "limit_down": 365.34,
+        "data_errors": []
+      }
+    }
+  },
+  {
+    "timestamp": 1775026841.2403562,
+    "datetime": "2026-04-01 15:00:41",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 0.0,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 10.24,
+        "limit_down": 10.24,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 119540.0,
+        "time": "20260401150031",
+        "pre_close": 405.93,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [],
+        "asks": [],
+        "limit_up": 446.52,
+        "limit_down": 365.34,
+        "data_errors": []
+      }
+    }
+  },
+  {
+    "timestamp": 1775026844.3970869,
+    "datetime": "2026-04-01 15:00:44",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 0.0,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 10.24,
+        "limit_down": 10.24,
+        "data_errors": [
+          "昨收价异常：为0或负数"
+        ]
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 119540.0,
+        "time": "20260401150031",
+        "pre_close": 405.93,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [],
+        "asks": [],
+        "limit_up": 446.52,
+        "limit_down": 365.34,
+        "data_errors": []
+      }
+    }
+  },
+  {
+    "timestamp": 1775026847.51177,
+    "datetime": "2026-04-01 15:00:47",
+    "quotes": {
+      "sh600000": {
+        "name": "600000",
+        "current": 10.24,
+        "open": 10.2,
+        "volume": 57416500,
+        "amount": 290952.0,
+        "time": "20260401150004",
+        "pre_close": 10.35,
+        "high": 10.37,
+        "low": 10.18,
+        "change_pct": 0.17,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [
+          {
+            "price": 10.24,
+            "volume": 170100
+          },
+          {
+            "price": 10.23,
+            "volume": 201900
+          },
+          {
+            "price": 10.22,
+            "volume": 145900
+          },
+          {
+            "price": 10.21,
+            "volume": 132000
+          },
+          {
+            "price": 10.2,
+            "volume": 215000
+          }
+        ],
+        "asks": [
+          {
+            "price": 10.25,
+            "volume": 8300
+          },
+          {
+            "price": 10.26,
+            "volume": 48400
+          },
+          {
+            "price": 10.27,
+            "volume": 89800
+          },
+          {
+            "price": 10.28,
+            "volume": 150900
+          },
+          {
+            "price": 10.29,
+            "volume": 99000
+          }
+        ],
+        "limit_up": 11.38,
+        "limit_down": 9.31,
+        "data_errors": []
+      },
+      "sz300750": {
+        "name": "300750",
+        "current": 405.71,
+        "open": 409.73,
+        "volume": 23170100,
+        "amount": 119540.0,
+        "time": "20260401150031",
+        "pre_close": 405.93,
+        "high": 409.87,
+        "low": 396.0,
+        "change_pct": 0.54,
+        "is_suspended": false,
+        "is_st": false,
+        "bids": [],
+        "asks": [],
+        "limit_up": 446.52,
+        "limit_down": 365.34,
+        "data_errors": []
+      }
+    }
+  }
+]
