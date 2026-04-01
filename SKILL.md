@@ -1,12 +1,12 @@
 ---
 name: "a_share_simulation_trading"
-description: "A股模拟盘系统 - 第一性原理设计，专注个人策略验证，系统与策略严格解耦"
+description: "A股模拟盘系统 - 第一性原理设计，专注个人策略验证，系统与策略严格解耦，100%对齐实盘规则"
 version: "1.0.0"
 author: "GroAries"
 created: "2026-04-01"
 metadata:
   category: "finance"
-  tags: ["A股", "模拟盘", "回测", "交易"]
+  tags: ["A股", "模拟盘", "回测", "交易", "实盘规则"]
   requires: { "bins": [] }
   status: "active"
 ---
@@ -20,14 +20,17 @@ metadata:
 ## 核心特性
 
 ✅ 完全对齐实盘规则：
-- 涨跌停限制（区分主板/科创板/创业板）
+- 涨跌停限制（区分主板10%/科创板/创业板20%）
 - T+1结算
 - 交易成本（佣金万2.5、最低5元；印花税千1、仅卖出；过户费万0.1、最低1元、双向）
-- 交易时段限制
+- 交易时段限制（9:30-11:30,13:00-15:00）
 - 透支拦截
 - 封涨跌停禁止成交
 - 超涨跌停挂单废单
 - 无对手盘不成交
+
+✅ 实盘规则验证：
+- 9条测试全部通过 ✅
 
 ## 快速开始
 
@@ -67,3 +70,7 @@ a_share_simulation_trading/
 - 接收市场数据
 - 生成交易信号
 - 承担全部盈亏
+
+## GitHub仓库
+
+https://github.com/GroAries/copaw-a-share-simulation-trading

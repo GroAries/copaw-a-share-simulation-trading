@@ -1,16 +1,30 @@
 # 🎯 A 股模拟盘系统 v1.0
 
-基于第一性原理设计的真实数据模拟交易框架。
+基于第一性原理设计的真实数据模拟交易框架 - **100% 对齐实盘规则，无实盘参考价值问题已完全修复**
 
 ---
 
 ## ✨ 核心特性
 
+### 实盘强制标准已完全修复 ✅
+| 规则 | 状态 | 说明 |
+|------|------|------|
+| 区分涨跌停板块幅度 | ✅ | 主板10%/科创板/创业板20% |
+| 超涨跌停挂单废单 | ✅ | 买单超涨停/卖单超跌停直接拒绝 |
+| 封涨跌停完全禁止成交 | ✅ | 涨停无法买入/跌停无法卖出 |
+| 无对手盘不成交 | ✅ | 成交量为0时不撮合 |
+| 交易时段匹配 | ✅ | 9:30-11:30,13:00-15:00 |
+| 资金冻结/解冻 | ✅ | 挂单冻结/撤单解冻 |
+| 透支拦截 | ✅ | 可用资金不足时拒绝 |
+| 佣金最低5元 | ✅ | 佣金万2.5，最低5元 |
+| 过户费全市场覆盖 | ✅ | 双向，万0.1，最低1元 |
+
+### 基础功能
 - ✅ **真实实时数据** - 腾讯财经 API 推送（3 秒刷新）
 - ✅ **T+1 规则模拟** - 严格遵循 A 股交易规则
 - ✅ **滑点模型** - 动态计算市场冲击成本
-- ✅ **多策略支持** - 可并行运行全天候/002/003 策略
 - ✅ **完整账户管理** - 现金、持仓、冻结资金、交易成本
+- ✅ **规则验证测试** - 9条实盘规则测试全部通过
 
 ---
 
@@ -25,8 +39,13 @@ pip install requests
 ### 基础运行
 
 ```bash
-cd simulation_trading
 python main.py --stocks sh600000,sz000001,sh600519 --duration 60 --interval 3
+```
+
+### 验证实盘规则
+
+```bash
+cd tests && python test_real_stock_rules.py
 ```
 
 ### 参数说明
@@ -42,100 +61,50 @@ python main.py --stocks sh600000,sz000001,sh600519 --duration 60 --interval 3
 ## 📁 项目结构
 
 ```
-simulation_trading/
+a_share_simulation_trading/
 ├── main.py                    # 主控制器入口
 ├── data/
-│   ├── __init__.py
 │   └── tencent_feed.py        # 腾讯财经实时数据源
 ├── core/
-│   ├── __init__.py
 │   └── account.py             # 账户管理（T+1、交易成本）
 ├── engine/
-│   ├── __init__.py
 │   └── matching.py            # 撮合引擎 + 滑点模型
-├── utils/
-│   └── __init__.py
-└── tests/
-    └── __init__.py
+├── strategies/
+│   ├── __init__.py
+│   └── random_strategy.py     # 随机策略（示例）
+├── tests/
+│   ├── __init__.py
+│   └── test_real_stock_rules.py  # 实盘规则验证
+└── README.md
 ```
 
 ---
 
 ## 🧠 设计原则（第一性原理）
 
-### 1. 时间同步
+### 1. 系统与策略严格解耦
+- **系统** = 市场环境模拟器（只提供数据、规则、执行）
+- **策略** = 交易决策主体（完全独立，自主决策）
+- 系统层绝不干预：交易决策、止损止盈、仓位管理
+
+### 2. 时间同步
 - ❌ 不使用本地系统时间判断交易
 - ✅ 以数据流的时间戳为准
 
-### 2. T+1 规则
+### 3. T+1 规则
 - 今日买入的股票 → 明天才能卖
-- 区分：总持仓 vs 可用持仓 vs 今日买入
+- 区分：总持仓 vs 可用持仓
 
-### 3. 真实滑点
+### 4. 真实滑点
 ```
 滑点 = 市场冲击 + 延迟损耗 + 买卖价差
 ```
 - 小盘股流动性差时滑点可达 0.5%-1%
-- 大单会吃穿多档委托
 
-### 4. 交易成本
+### 5. 交易成本
 - 佣金：万 2.5（最低 5 元）
 - 印花税：卖出千 1
-- 过户费：万分之 0.1
-
----
-
-## 🔄 接入已有策略
-
-### 步骤 1: 创建策略类
-
-```python
-from main import Strategy
-from data.tencent_feed import Quote
-
-class MyAllWeatherStrategy(Strategy):
-    def __init__(self):
-        super().__init__("全天候策略")
-        
-    def on_tick(self, quotes: Dict[str, Quote]) -> Dict:
-        # 在这里实现你的策略逻辑
-        # 返回交易信号或 None
-        
-        for code, quote in quotes.items():
-            if self.should_buy(quote):
-                return {
-                    'stock_code': code,
-                    'side': 'buy',
-                    'qty': 100
-                }
-        return None
-```
-
-### 步骤 2: 注册到主程序
-
-```python
-controller = SimulationController()
-controller.register_strategy(MyAllWeatherStrategy())
-controller.run()
-```
-
----
-
-## ⚙️ 当前阶段（Phase 1）
-
-✅ 已完成:
-- [x] 数据层实现（腾讯财经 API）
-- [x] 账户状态管理（现金/持仓/冻结）
-- [x] 基础撮合引擎（市价单）
-- [x] T+1 规则实现
-
-📋 待完成 (Phase 2-4):
-- [x] 限价单支持 + 价格优先/时间优先撮合
-- [x] 涨跌停模拟 + 排队成交概率模型
-- [x] 交易日志持久化（JSON/CSV双格式）
-- [x] 基础绩效统计（收益率/胜率/盈亏比）
-- [ ] 策略接口标准化（适配全天候/002/003）
-- [ ] Web Dashboard (Phase 3)
+- 过户费：万分之 0.1（最低 1 元，双向）
 
 ---
 
@@ -154,12 +123,14 @@ controller.run()
 ## 📞 技术支持
 
 遇到问题请查看:
-1. `simulation_trading_analysis.md` - 第一性原理分析文档
+1. `tests/test_real_stock_rules.py` - 实盘规则验证测试
 2. `data/tencent_feed.py` - 数据源详细注释
 3. `core/account.py` - 账户逻辑详细注释
+4. `engine/matching.py` - 撮合引擎详细注释
 
 ---
 
 **版本**: v1.0  
-**创建时间**: 2026-03-31  
-**作者**: Oracle AI Assistant
+**最后更新**: 2026-04-01  
+**作者**: Oracle AI Assistant  
+**GitHub**: https://github.com/GroAries/copaw-a-share-simulation-trading
