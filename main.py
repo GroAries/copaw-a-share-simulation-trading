@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 模拟盘主入口 - 第一性原理：系统只提供数据、规则、执行，不干预决策
-整合腾讯实时行情（含五档盘口/停牌/ST）、账户管理、撮合引擎
+整合腾讯实时行情（含五档盘口/停牌/ST）、账户管理、撮合引擎（集合竞价/隔夜单/偷价防护）
 """
 
 import argparse
@@ -34,6 +34,7 @@ def main():
     parser.add_argument('--initial-cash', type=float, default=1000000.0, help='初始资金')
     parser.add_argument('--duration', type=int, default=60, help='运行时长（秒）')
     parser.add_argument('--interval', type=int, default=3, help='行情刷新间隔（秒）')
+    parser.add_argument('--allow-overnight', action='store_true', help='允许挂隔夜单')
     args = parser.parse_args()
     
     stock_list = args.stocks.split(',')
@@ -47,6 +48,7 @@ def main():
     print(f"    股票池: {stock_list}")
     print(f"    初始资金: ¥{account.initial_cash:,.2f}")
     print(f"    运行时长: {args.duration}秒")
+    print(f"    隔夜单: {'允许' if args.allow_overnight else '禁止'}")
     print("="*60)
     
     start_time = time.time()
@@ -87,6 +89,7 @@ def main():
                     qty = signal['qty']
                     price = signal.get('price')
                     order_type = 'LIMIT' if price else 'MARKET'
+                    is_overnight = signal.get('is_overnight', False) and args.allow_overnight
                     
                     # 创建订单
                     order = Order(
@@ -97,7 +100,8 @@ def main():
                         price=price if price else 0.0,
                         qty=qty,
                         remaining_qty=qty,
-                        timestamp=time.time()
+                        timestamp=time.time(),
+                        is_overnight=is_overnight
                     )
                     
                     # 撮合
@@ -124,7 +128,7 @@ def main():
                                 print(f"[*] SELL {quote['name']} ({stock_code}): {exec_qty}股 @ ¥{exec_price:.2f} | 盈亏: ¥{pnl:.2f}")
                     else:
                         if reason:
-                            print(f"[!] 订单拒绝 {quote['name']} ({stock_code}): {reason}")
+                            print(f"[!] 订单状态 {quote['name']} ({stock_code}): {reason}")
             
             # 打印当前状态
             print("-"*60)
