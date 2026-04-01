@@ -18,4 +18,3 @@ test_output.txt
 debug_quote.py
 test_extreme_scenarios*.py
 output/
-tests/
