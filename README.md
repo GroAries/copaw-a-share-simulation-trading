@@ -1,6 +1,21 @@
-# 🎯 A 股模拟盘系统 v1.0
+# 🎯 A 股模拟盘系统 v2.0
 
-基于第一性原理设计的真实数据模拟交易框架 - **100% 对齐实盘规则，无实盘参考价值问题已完全修复**
+基于第一性原理设计的真实数据模拟交易框架 - **100% 对齐实盘规则，无实盘参考价值问题已完全修复，支持多策略并行运行，兼容所有现有策略**
+
+---
+
+## 🚀 v2.0 重大更新（2026-04-01）
+### ✨ 新增功能
+| 功能 | 状态 | 说明 |
+|------|------|------|
+| 通用策略适配层 | ✅ 完成 | 无需修改任何原策略代码，100%兼容所有基于BaseStrategy的现有策略 |
+| 多策略并行运行 | ✅ 完成 | 每个策略独立账户、独立撮合，互不干扰，实时对比结果 |
+| 默认加载三个验证策略 | ✅ 完成 | 交易技巧002 v2.2、交易技巧003 v4、全天候交易系统v5.0，开箱即用 |
+
+### 📝 改造原则（第一性原理）
+- ❌ 不修改任何现有策略文件，保持原策略逻辑100%不变
+- ✅ 只新增适配层，实现接口转换
+- ✅ 模拟盘只负责数据提供、规则执行、订单撮合，完全解耦策略逻辑
 
 ---
 
@@ -43,6 +58,15 @@ pip install requests
 python main.py --stocks sh600000,sz000001,sh600519 --duration 60 --interval 3
 ```
 
+### 多策略并行运行（v2.0新增）
+```bash
+# 三个策略并行，覆盖全天交易时段
+python main.py --stocks sh600519,sz000001,sh600000,sh688981,sh603501 --initial-cash 1000000 --duration 14400 --interval 3
+```
+
+### 加载自定义策略
+只需将自定义策略继承自BaseStrategy并实现generate_signal方法，然后在main.py中导入并初始化即可，无需修改模拟盘系统代码。
+
 ### 验证实盘规则
 
 ```bash
@@ -67,6 +91,7 @@ cd tests && python test_real_stock_rules.py
 ```
 a_share_simulation_trading/
 ├── main.py                    # 主控制器入口
+├── strategy_adapter.py       # 通用策略适配层（v2.0新增）
 ├── data/
 │   └── tencent_feed.py        # 腾讯财经实时数据源
 ├── core/
@@ -153,7 +178,7 @@ a_share_simulation_trading/
 
 ---
 
-**版本**: v1.0  
+**版本**: v2.0  
 **最后更新**: 2026-04-01  
 **作者**: Oracle AI Assistant  
 **GitHub**: https://github.com/GroAries/copaw-a-share-simulation-trading

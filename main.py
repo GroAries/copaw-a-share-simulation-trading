@@ -12,7 +12,31 @@ from datetime import datetime, time as dt_time
 from data.tencent_feed import TencentRealtimeFeed
 from core.account import Account
 from engine.matching import MatchingEngine, Order
-from strategies.random_strategy import RandomStrategy
+from strategy_adapter import StrategyAdapter
+import sys
+import os
+import importlib.machinery
+# 导入现有策略（不修改原文件，动态加载）
+# 1. 交易技巧002 v2.2
+loader002 = importlib.machinery.SourceFileLoader(
+    'Strategy002', 
+    '/Users/xy23050701/.copaw/workspaces/default/skills/trading_skill_002_v2.2-active/trading_skill_002_v2.2.py'
+)
+Strategy002 = loader002.load_module().TradingSkill002V22Strategy
+
+# 2. 交易技巧003 v4
+loader003 = importlib.machinery.SourceFileLoader(
+    'Strategy003', 
+    '/Users/xy23050701/.copaw/workspaces/default/skills/trading-skill-003-v4-active/trading_skill_003_v4.py'
+)
+Strategy003 = loader003.load_module().TradingSkill003V4Strategy
+
+# 3. 全天候交易系统v5.0
+loader_aw = importlib.machinery.SourceFileLoader(
+    'StrategyAllWeather', 
+    '/Users/xy23050701/.copaw/workspaces/default/skills/all_weather_trading_system-active/all_weather_v5.py'
+)
+StrategyAllWeather = loader_aw.load_module().AllWeatherTradingSystemV5
 
 
 def parse_trade_time(trade_time_str: str) -> dt_time:
@@ -41,16 +65,35 @@ def main():
     stock_list = args.stocks.split(',')
     
     feed = TencentRealtimeFeed()
-    account = Account(initial_cash=args.initial_cash)
-    engine = MatchingEngine(slippage=0.001)
-    strategy = RandomStrategy()
+    # 初始化三个策略，每个策略独立账户和撮合引擎
+    strategies = [
+        {
+            'name': '交易技巧002 v2.2',
+            'strategy': StrategyAdapter(Strategy002()),
+            'account': Account(initial_cash=args.initial_cash),
+            'engine': MatchingEngine(slippage=0.001)
+        },
+        {
+            'name': '交易技巧003 v4',
+            'strategy': StrategyAdapter(Strategy003()),
+            'account': Account(initial_cash=args.initial_cash),
+            'engine': MatchingEngine(slippage=0.001)
+        },
+        {
+            'name': '全天候交易系统v5.0',
+            'strategy': StrategyAdapter(StrategyAllWeather()),
+            'account': Account(initial_cash=args.initial_cash),
+            'engine': MatchingEngine(slippage=0.001)
+        }
+    ]
     
-    print(f"[*] 模拟盘启动 - 第一性原理")
+    print(f"[*] 模拟盘启动 - 第一性原理（多策略并行版）")
     print(f"    股票池: {stock_list}")
-    print(f"    初始资金: ¥{account.initial_cash:,.2f}")
+    print(f"    初始资金: ¥{args.initial_cash:,.2f} 每个策略独立账户")
+    print(f"    运行策略: {[s['name'] for s in strategies]}")
     print(f"    运行时长: {args.duration}秒")
     print(f"    隔夜单: {'允许' if args.allow_overnight else '禁止'}")
-    print("="*60)
+    print("="*80)
     
     start_time = time.time()
     prev_positions = {}
